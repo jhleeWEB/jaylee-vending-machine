@@ -1,1 +1,1 @@
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" sandbox="allow-scripts allow-popups allow-forms allow-modals allow-same-origin" width="800" height="450" src="https://boardmix.com/app/share/CAE.CKfacyABKhC5JDZwovbEBRkfLPzB_Yt3MAZAAQ/bkcEIf" allowfullscreen></iframe>
+![image](https://github.com/user-attachments/assets/31348624-63c9-48b6-a3de-3dbccd872822)
