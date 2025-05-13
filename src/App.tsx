@@ -1,5 +1,4 @@
-import './App.css';
-import VendingMachine from './pages/VeningMachine/VendingMachine';
+import VendingMachine from './pages/vendingMachine/VendingMachine';
 
 function App() {
 	return <VendingMachine />;
