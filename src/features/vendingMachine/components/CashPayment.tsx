@@ -1,6 +1,5 @@
 import { Button, Card, CardBody } from '@heroui/react';
 import { useContext } from 'react';
-import uuid from 'react-uuid';
 import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
 import SuperBigText from './SuperBigText';
 
@@ -29,7 +28,7 @@ export default function CashPayment() {
 				<div className='flex gap-2'>
 					{cashNotes.map((note) => (
 						<Button
-							key={uuid()}
+							key={note}
 							className='font-bold'
 							variant='bordered'
 							onPress={() => onPressCashValue(note)}

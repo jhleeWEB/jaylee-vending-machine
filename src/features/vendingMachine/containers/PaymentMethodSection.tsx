@@ -18,7 +18,12 @@ export default function PaymentMethodSection() {
 			<CardHeader className='text-3xl font-bold'>Payment Method</CardHeader>
 			<Divider />
 			<CardBody>
-				<Tabs aria-label='Options' defaultSelectedKey='cash' fullWidth>
+				<Tabs
+					isDisabled={machineState.funds > 0}
+					aria-label='Options'
+					defaultSelectedKey='cash'
+					fullWidth
+				>
 					<Tab key='cash' title='Cash'>
 						<CashPayment />
 					</Tab>

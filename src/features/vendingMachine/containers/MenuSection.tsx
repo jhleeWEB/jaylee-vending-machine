@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
-import uuid from 'react-uuid';
 import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
 import MenuItem from '../components/MenuItem';
 import Cover from '../components/Cover';
@@ -36,8 +35,8 @@ export default function MenuSection() {
 			<CardHeader className='text-3xl font-bold'>Menu</CardHeader>
 			<Divider />
 			<CardBody className='grid grid-cols-3 gap-2'>
-				{items.map(({ title, price }) => (
-					<MenuItem key={uuid()} title={title} price={price} />
+				{items.map(({ id, title, price }) => (
+					<MenuItem key={id} title={title} price={price} />
 				))}
 			</CardBody>
 		</Card>
