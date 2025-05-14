@@ -1,6 +1,6 @@
 import React, { createContext, useState } from 'react';
 
-type StateType = 'idle' | 'selection' | 'payment' | 'dispense';
+type StateType = 'idle' | 'selection' | 'dispense';
 
 interface MachineState {
 	state: StateType;
