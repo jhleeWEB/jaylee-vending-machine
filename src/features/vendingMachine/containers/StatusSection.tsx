@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
-import { StateContext } from './VendingMachineContextProvider';
-import SuperBigText from './components/SuperBigText';
+import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
 
-import CountdownTimer from './components/CountdownTimer';
+import CountdownTimer from '../components/CountdownTimer';
+import SuperBigText from '../components/SuperBigText';
 
 export default function StatusSection() {
-	const { machineState } = useContext(StateContext);
+	const { machineState } = useContext(VendingMachineStateContext);
 
 	return (
 		<Card className='min-h-fit'>

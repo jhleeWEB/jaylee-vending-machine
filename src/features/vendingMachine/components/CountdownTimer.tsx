@@ -1,8 +1,8 @@
 import { millisecondsToSeconds } from 'framer-motion';
-import SuperBigText from './SuperBigText';
+
 import { useContext, useEffect, useState } from 'react';
-import { StateContext } from '../VendingMachineContextProvider';
-import { addToast } from '@heroui/react';
+import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import SuperBigText from './SuperBigText';
 
 const DEFAULT_COUNTDOWN_TIME = 10000;
 const SECONDS = 1000;
@@ -11,7 +11,9 @@ export default function CountdownTimer() {
 	const initialState = DEFAULT_COUNTDOWN_TIME;
 	const [countdown, setCountdown] = useState(initialState);
 	const [startCountdown, setStartCountdown] = useState(false);
-	const { machineState, setMachineState } = useContext(StateContext);
+	const { machineState, setMachineState } = useContext(
+		VendingMachineStateContext
+	);
 
 	useEffect(() => {
 		if (machineState.funds > 0) {
@@ -22,6 +24,14 @@ export default function CountdownTimer() {
 	useEffect(() => {
 		if (machineState.state === 'selection') {
 			start();
+		}
+
+		if (machineState.state === 'dispense') {
+			reset();
+		}
+
+		if (machineState.state === 'idle') {
+			stop();
 		}
 	}, [machineState.state]);
 
@@ -49,13 +59,13 @@ export default function CountdownTimer() {
 		setStartCountdown(false);
 		setCountdown(initialState);
 		setMachineState({ funds: 0, state: 'idle' });
-		addToast({
-			title: 'Timeout',
-			description: 'Transitioning to idle state',
-			variant: 'flat',
-			color: 'default',
-		});
 	};
+
+	const reset = () => {
+		setStartCountdown(false);
+		setCountdown(initialState);
+	};
+
 	const reStart = () => {
 		setStartCountdown(true);
 		setCountdown(initialState);

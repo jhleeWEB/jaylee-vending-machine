@@ -1,14 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
-import { StateContext } from './VendingMachineContextProvider';
 import { Card, CardBody, CardHeader } from '@heroui/react';
-import formatToWon from './utils/formatToWon';
+import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import formatToWon from '../utils/formatToWon';
 interface Props {
 	title: string;
 	price: number;
 }
 
-export default function Item({ title, price }: Props) {
-	const { machineState, setMachineState } = useContext(StateContext);
+export default function MenuItem({ title, price }: Props) {
+	const { machineState, setMachineState } = useContext(
+		VendingMachineStateContext
+	);
 	const [isDisabled, setDisabled] = useState(false);
 
 	useEffect(() => {
