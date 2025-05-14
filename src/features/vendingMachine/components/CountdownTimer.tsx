@@ -1,6 +1,6 @@
 import { millisecondsToSeconds } from 'framer-motion';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
 import SuperBigText from './SuperBigText';
 
@@ -8,68 +8,65 @@ const DEFAULT_COUNTDOWN_TIME = 10000;
 const SECONDS = 1000;
 
 export default function CountdownTimer() {
-	const initialState = DEFAULT_COUNTDOWN_TIME;
-	const [countdown, setCountdown] = useState(initialState);
-	const [startCountdown, setStartCountdown] = useState(false);
+	const [countdown, setCountdown] = useState(0);
 	const { machineState, setMachineState } = useContext(
 		VendingMachineStateContext
 	);
+	const intervalRef = useRef<number | null>(null);
 
 	useEffect(() => {
 		if (machineState.funds > 0) {
-			reStart();
+			reStartCountdown();
 		}
 	}, [machineState.funds]);
 
 	useEffect(() => {
 		if (machineState.state === 'selection') {
-			start();
-		}
-
-		if (machineState.state === 'dispense') {
-			reset();
-		}
-
-		if (machineState.state === 'idle') {
-			stop();
+			startCountdown();
+		} else if (machineState.state === 'dispense') {
+			resetCountdown();
+		} else if (machineState.state === 'idle') {
+			stopCountdown();
 		}
 	}, [machineState.state]);
 
-	useEffect(() => {
-		const countdownId = setInterval(() => {
-			if (countdown >= 0 && startCountdown) {
-				setCountdown((prev) => prev - SECONDS);
-			}
+	const startCountdown = () => {
+		clearCountdown();
+		intervalRef.current = setInterval(() => {
+			setCountdown((prevState) => {
+				if (prevState <= 0) {
+					stopCountdown();
+					return 0;
+				}
+				return prevState - SECONDS;
+			});
 		}, SECONDS);
-
-		if (countdown <= 0) {
-			stop();
-		}
-
-		return () => {
-			clearInterval(countdownId);
-		};
-	}, [countdown, startCountdown]);
-
-	const start = () => {
-		setStartCountdown(true);
 	};
 
-	const stop = () => {
-		setStartCountdown(false);
-		setCountdown(initialState);
+	const stopCountdown = () => {
+		clearCountdown();
+		setCountdown(0);
 		setMachineState({ funds: 0, state: 'idle' });
 	};
 
-	const reset = () => {
-		setStartCountdown(false);
-		setCountdown(initialState);
+	const resetCountdown = () => {
+		clearCountdown();
+		setCountdown(0);
 	};
 
-	const reStart = () => {
-		setStartCountdown(true);
-		setCountdown(initialState);
+	const reStartCountdown = () => {
+		clearCountdown();
+		setCountdown(DEFAULT_COUNTDOWN_TIME);
+		startCountdown();
 	};
+
+	const clearCountdown = () => {
+		if (intervalRef.current) {
+			clearInterval(intervalRef.current);
+			intervalRef.current = null;
+		}
+	};
+
 	return (
 		<SuperBigText size='md' position='center'>
 			{millisecondsToSeconds(countdown)}
