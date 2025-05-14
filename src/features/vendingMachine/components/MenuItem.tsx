@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { Card, CardBody, CardHeader } from '@heroui/react';
 import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
 import formatToWon from '../utils/formatToWon';
@@ -11,15 +11,7 @@ export default function MenuItem({ title, price }: Props) {
 	const { machineState, setMachineState } = useContext(
 		VendingMachineStateContext
 	);
-	const [isDisabled, setDisabled] = useState(false);
-
-	useEffect(() => {
-		if (price > machineState.funds) {
-			setDisabled(true);
-		} else {
-			setDisabled(false);
-		}
-	}, [machineState.funds]);
+	const isDisabled = machineState.funds < price;
 
 	const onClickItem = () => {
 		const nextState = { ...machineState };
@@ -31,8 +23,6 @@ export default function MenuItem({ title, price }: Props) {
 				nextState.funds = nextState.funds - price;
 				setMachineState({ ...nextState, state: 'selection' });
 			}, 2000);
-		} else {
-			alert('Not enought mineral');
 		}
 	};
 
