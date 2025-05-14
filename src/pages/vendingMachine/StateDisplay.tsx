@@ -42,7 +42,7 @@ export default function StateDisplay() {
 	}, [countdown, startCountdown]);
 
 	return (
-		<Card>
+		<Card className='min-h-fit'>
 			<CardHeader className='text-3xl font-bold'>Status</CardHeader>
 			<CardBody className='flex flex-row justify-between gap-2'>
 				<p className='w-full text-2xl text-center font-bold bg-gray-100 rounded-lg p-4'>

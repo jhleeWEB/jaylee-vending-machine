@@ -49,7 +49,7 @@ export default function PaymentMethods() {
 	};
 
 	return (
-		<Card>
+		<Card className='min-h-fit'>
 			{machineState.state === 'dispense' && <Cover />}
 			<CardHeader className='text-3xl font-bold'>Payment Method</CardHeader>
 			<CardBody>

@@ -27,7 +27,7 @@ export default function ItemGrid() {
 	const { machineState } = useContext(StateContext);
 
 	return (
-		<Card>
+		<Card className='min-h-fit'>
 			{machineState.state === 'dispense' && <Cover />}
 			<CardHeader className='text-3xl font-bold'>Menu</CardHeader>
 			<CardBody className='grid grid-cols-3 gap-2'>
