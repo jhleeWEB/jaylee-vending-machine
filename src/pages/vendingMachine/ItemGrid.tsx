@@ -1,6 +1,9 @@
 import uuid from 'react-uuid';
-import { Card, CardBody } from '@heroui/react';
+import { useContext } from 'react';
+import { StateContext } from './ContextProvider';
+import { Card, CardBody, CardHeader } from '@heroui/react';
 import Item from './Item';
+import Cover from '../../components/Cover';
 
 const items = [
 	{
@@ -21,8 +24,12 @@ const items = [
 ];
 
 export default function ItemGrid() {
+	const { machineState } = useContext(StateContext);
+
 	return (
 		<Card>
+			{machineState.state === 'dispense' && <Cover />}
+			<CardHeader className='text-3xl font-bold'>Menu</CardHeader>
 			<CardBody className='grid grid-cols-3 gap-2'>
 				{items.map(({ title, price }) => (
 					<Item key={uuid()} title={title} price={price} />

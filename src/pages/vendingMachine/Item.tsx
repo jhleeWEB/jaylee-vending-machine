@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StateContext } from './ContextProvider';
 import { Card, CardBody, CardHeader } from '@heroui/react';
 import formatToWon from '../../utils/formatToWon';
@@ -9,21 +9,38 @@ interface Props {
 
 export default function Item({ title, price }: Props) {
 	const { machineState, setMachineState } = useContext(StateContext);
+	const [isDisabled, setDisabled] = useState(false);
+
+	useEffect(() => {
+		if (price > machineState.funds) {
+			setDisabled(true);
+		} else {
+			setDisabled(false);
+		}
+	}, [machineState.funds]);
 
 	const onClickItem = () => {
 		const nextState = { ...machineState };
 
 		if (nextState.funds >= price) {
 			nextState.state = 'dispense';
-			nextState.funds = nextState.funds - price;
 			setMachineState(nextState);
+			setTimeout(() => {
+				nextState.funds = nextState.funds - price;
+				setMachineState({ ...nextState, state: 'selection' });
+			}, 2000);
 		} else {
 			alert('Not enought mineral');
 		}
 	};
 
 	return (
-		<Card className='py-4' isPressable onClick={onClickItem}>
+		<Card
+			className='py-4'
+			onClick={onClickItem}
+			isPressable={!isDisabled}
+			isDisabled={isDisabled}
+		>
 			<CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
 				<p className='text-tiny uppercase font-bold'>{formatToWon(price)}</p>
 				<small className='text-default-500'>COLD</small>

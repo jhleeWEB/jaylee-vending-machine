@@ -1,7 +1,11 @@
 import VendingMachine from './pages/vendingMachine/VendingMachine';
 
 function App() {
-	return <VendingMachine />;
+	return (
+		<div className='relative h-dvh'>
+			<VendingMachine />
+		</div>
+	);
 }
 
 export default App;
