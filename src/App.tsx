@@ -1,10 +1,9 @@
-import VendingMachine from './features/vendingMachine/VendingMachine';
-import VendingMachinePage from './pages/VendingMachinePage';
+import MainPage from './pages/MainPage';
 
 function App() {
 	return (
 		<main className='relative h-dvh'>
-			<VendingMachinePage />
+			<MainPage />
 		</main>
 	);
 }
