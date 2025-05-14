@@ -5,7 +5,7 @@ import PaymentMethodSection from './PaymentMethodSection';
 
 export default function VendingMachine() {
 	return (
-		<section className='flex flex-col gap-6 m-auto p-8 max-w-xl h-lvh justify-center'>
+		<section className='relative flex flex-col gap-6 top-[15%] m-auto p-8 max-w-xl justify-center'>
 			<VendingMachineContextProvider>
 				<StatusSection />
 				<MenuSection />
