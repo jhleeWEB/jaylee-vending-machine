@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
-import { StateContext } from './ContextProvider';
+import { StateContext } from './VendingMachineContextProvider';
 import { Card, CardBody, CardHeader } from '@heroui/react';
-import formatToWon from '../../utils/formatToWon';
+import formatToWon from './utils/formatToWon';
 interface Props {
 	title: string;
 	price: number;

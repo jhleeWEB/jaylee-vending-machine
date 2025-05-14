@@ -1,9 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
-import { StateContext } from './ContextProvider';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardHeader,
+	Divider,
+	Tab,
+	Tabs,
+} from '@heroui/react';
+
+import { StateContext } from './VendingMachineContextProvider';
 import uuid from 'react-uuid';
-import { Button, Card, CardBody, CardHeader, Tab, Tabs } from '@heroui/react';
-import formatToWon from '../../utils/formatToWon';
-import Cover from '../../components/Cover';
+import formatToWon from './utils/formatToWon';
+import Cover from './components/Cover';
+import SuperBigText from './components/SuperBigText';
 
 const cashNotes = [100, 500, 1000, 5000, 10000];
 const cardInfo = {
@@ -13,7 +23,7 @@ const cardInfo = {
 
 type PaymentType = 'cash' | 'card';
 
-export default function PaymentMethods() {
+export default function PaymentMethodSection() {
 	const { machineState, setMachineState } = useContext(StateContext);
 	const [paymentType, setPaymentType] = useState<PaymentType>('cash');
 	const [insertedCard, setInsertedCard] = useState<
@@ -52,6 +62,7 @@ export default function PaymentMethods() {
 		<Card className='min-h-fit'>
 			{machineState.state === 'dispense' && <Cover />}
 			<CardHeader className='text-3xl font-bold'>Payment Method</CardHeader>
+			<Divider />
 			<CardBody>
 				<Tabs
 					aria-label='Options'
@@ -69,12 +80,15 @@ export default function PaymentMethods() {
 										<Button
 											key={uuid()}
 											className='font-bold'
-											variant='flat'
+											variant='bordered'
 											onPress={() => onPressCashValue(note)}
 										>{`${note.toLocaleString()}원`}</Button>
 									))}
 								</div>
-								<p className='text-5xl text-right font-bold bg-gray-100 rounded-lg p-4'>{`${machineState.funds.toLocaleString()}원`}</p>
+								<SuperBigText
+									size='lg'
+									position='right'
+								>{`${machineState.funds.toLocaleString()}원`}</SuperBigText>
 								<div className='flex w-full justify-center gap-2'>
 									<Button color='danger' fullWidth onPress={onPressReturnCash}>
 										Return Cash

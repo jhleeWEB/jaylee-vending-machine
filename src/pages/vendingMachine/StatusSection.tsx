@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from 'react';
-import { StateContext } from './ContextProvider';
-import { Card, CardBody, CardHeader } from '@heroui/react';
+import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
 import { millisecondsToSeconds } from 'framer-motion';
+import { StateContext } from './VendingMachineContextProvider';
+import SuperBigText from './components/SuperBigText';
 
 const RESET_COUNTDOWN_TIME = 10000;
 
-export default function StateDisplay() {
+export default function StatusSection() {
 	const { machineState, setMachineState } = useContext(StateContext);
 	const [countdown, setCountdown] = useState(0);
 	const [startCountdown, setStartCountdown] = useState(false);
@@ -44,13 +45,14 @@ export default function StateDisplay() {
 	return (
 		<Card className='min-h-fit'>
 			<CardHeader className='text-3xl font-bold'>Status</CardHeader>
+			<Divider />
 			<CardBody className='flex flex-row justify-between gap-2'>
-				<p className='w-full text-2xl text-center font-bold bg-gray-100 rounded-lg p-4'>
-					{machineState.state}
-				</p>
-				<p className='w-1/4 text-2xl text-center font-bold bg-gray-100 rounded-lg p-4'>
+				<SuperBigText size='md' position='center'>
+					{machineState.state.toUpperCase()}
+				</SuperBigText>
+				<SuperBigText size='md' position='center'>
 					{millisecondsToSeconds(countdown)}
-				</p>
+				</SuperBigText>
 			</CardBody>
 		</Card>
 	);
