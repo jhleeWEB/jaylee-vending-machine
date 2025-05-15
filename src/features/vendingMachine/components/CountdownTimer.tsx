@@ -13,12 +13,6 @@ export default function CountdownTimer() {
 	const intervalRef = useRef<number | null>(null);
 
 	useEffect(() => {
-		if (state.funds > 0) {
-			reStartCountdown();
-		}
-	}, [state.funds]);
-
-	useEffect(() => {
 		if (state.machineState === 'selection') {
 			startCountdown();
 		} else if (state.machineState === 'dispense') {
