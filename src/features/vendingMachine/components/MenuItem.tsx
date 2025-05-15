@@ -6,11 +6,13 @@ import { SECONDS } from '../commons/constants';
 interface Props {
 	title: string;
 	price: number;
+	id: number;
+	count: number;
 }
 
 const TWO_SECONDS = SECONDS * 2;
 
-export default function MenuItem({ title, price }: Props) {
+export default function MenuItem({ title, price, id, count }: Props) {
 	const { state, dispatch } = useVendingMachineContext();
 	const delayTimeout = useRef<number | null>(null);
 
@@ -19,7 +21,7 @@ export default function MenuItem({ title, price }: Props) {
 		money = state.cardInfo.balance;
 	}
 
-	const isDisabled = money < price;
+	const isDisabled = money < price || count === 0;
 
 	useEffect(() => {
 		return () => {
@@ -31,7 +33,7 @@ export default function MenuItem({ title, price }: Props) {
 	const startDelayTimeout = () => {
 		clearDelayTimeout();
 		delayTimeout.current = setTimeout(() => {
-			dispatch({ type: 'PURCHASE', price });
+			dispatch({ type: 'PURCHASE', price, id });
 			dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 		}, TWO_SECONDS);
 	};
@@ -57,8 +59,11 @@ export default function MenuItem({ title, price }: Props) {
 		>
 			<CardHeader className='pb-0 pt-2 px-4 flex-col items-start'>
 				<p className='text-tiny uppercase font-bold'>{formatToWon(price)}</p>
-				<small className='text-default-500'>COLD</small>
-				<h4 className='font-bold text-large'>{title}</h4>
+				<small className='text-default-500'>{count}개</small>
+				<h4 className='font-bold text-large'>
+					{title}
+					{count === 0 && '(품절)'}
+				</h4>
 			</CardHeader>
 			<CardBody className='overflow-visible py-2'></CardBody>
 		</Card>

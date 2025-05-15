@@ -8,7 +8,7 @@ export default function CashPayment() {
 	const { state, dispatch } = useVendingMachineContext();
 
 	const onPressCashValue = (amount: number) => {
-		dispatch({ type: 'ADD_FUNDS', price: amount });
+		dispatch({ type: 'ADD_FUNDS', amount });
 		dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 	};
 

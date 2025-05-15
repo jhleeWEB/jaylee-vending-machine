@@ -3,24 +3,6 @@ import { useVendingMachineContext } from '../contexts/VendingMachineContextProvi
 import MenuItem from '../components/MenuItem';
 import Cover from '../components/Cover';
 
-const items = [
-	{
-		id: 0,
-		title: '콜라',
-		price: 1100,
-	},
-	{
-		id: 1,
-		title: '커피',
-		price: 700,
-	},
-	{
-		id: 2,
-		title: '물',
-		price: 600,
-	},
-];
-
 export default function MenuSection() {
 	const { state } = useVendingMachineContext();
 
@@ -34,8 +16,8 @@ export default function MenuSection() {
 			<CardHeader className='text-3xl font-bold'>Menu</CardHeader>
 			<Divider />
 			<CardBody className='grid grid-cols-3 gap-2'>
-				{items.map(({ id, title, price }) => (
-					<MenuItem key={id} title={title} price={price} />
+				{state.inventory.map((item) => (
+					<MenuItem key={item.id} {...item} />
 				))}
 			</CardBody>
 		</Card>

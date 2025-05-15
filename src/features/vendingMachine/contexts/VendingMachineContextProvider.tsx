@@ -13,6 +13,26 @@ const initialState: VendingMachineState = {
 	machineState: 'idle',
 	paymentType: 'cash',
 	cardInfo: null,
+	inventory: [
+		{
+			id: 0,
+			title: '콜라',
+			price: 1100,
+			count: 5,
+		},
+		{
+			id: 1,
+			title: '커피',
+			price: 700,
+			count: 4,
+		},
+		{
+			id: 2,
+			title: '물',
+			price: 600,
+			count: 6,
+		},
+	],
 };
 type VendingMachineContextType = {
 	state: VendingMachineState;
