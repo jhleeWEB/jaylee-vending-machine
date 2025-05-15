@@ -10,7 +10,7 @@ export interface VendingMachineState {
 	} | null;
 }
 
-type VendingMachineAction =
+export type VendingMachineAction =
 	| {
 			type: 'PURCHASE';
 			price: number;
