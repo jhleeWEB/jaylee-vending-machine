@@ -2,9 +2,12 @@
 
 <img src="https://img.shields.io/badge/^6.3.5-Vite-646CFF?style=flat-square&logo=vite&logoColor=white"/> <img src="https://img.shields.io/badge/^19.0.0-React-61DAFB?style=flat-square&logo=React&logoColor=white&"/> <img src="https://img.shields.io/badge/~5.8.3-Typescript-3178C6?style=flat-square&logo=typescript&logoColor=white"/> <img src="https://img.shields.io/badge/^3.4.17-Tailwindcss-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white"/> <img src="https://img.shields.io/badge/^2.7.0-HeroUI-000000?style=flat-square&logo=nextui&logoColor=white"/>
 
-<a href="https://jhleeweb.github.io/jaylee-vending-machine/">
- JayLee-Vending-Machine Github Page
-</a>
+
+<img alt="cash-payment" style="width:350px; float: left;" src="https://github.com/user-attachments/assets/e687a774-16e8-46f3-912d-95adbe4e6e5d"/>
+<img alt="card-payment" style="width:350px; float: right;" src="https://github.com/user-attachments/assets/2482d214-06f6-4a4a-aa12-5e7d2129d40d"/>
+
+
+<a href="https://jhleeweb.github.io/jaylee-vending-machine/"> JayLee-Vending-Machine Github Page </a>
 
 ## 목차
 
