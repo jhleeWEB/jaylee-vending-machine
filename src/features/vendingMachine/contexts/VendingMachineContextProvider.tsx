@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useState } from 'react';
+import React, { createContext, useContext, useReducer, useState } from 'react';
 import vendingMachineReducer, {
 	type VendingMachineAction,
 	type VendingMachineState,
@@ -20,6 +20,16 @@ type VendingMachineContextType = {
 };
 export const VendingMachineStateContext =
 	createContext<VendingMachineContextType | null>(null);
+
+export function useVendingMachineContext() {
+	const value = useContext(VendingMachineStateContext);
+	if (!value) {
+		throw new Error(
+			'useVendingMachineContext가 VendingMachineContextProvider 내부에 없습니다!'
+		);
+	}
+	return value;
+}
 
 export default function VendingMachineContextProvider({
 	children,
