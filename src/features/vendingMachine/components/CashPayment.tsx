@@ -1,25 +1,20 @@
 import { Button, Card, CardBody } from '@heroui/react';
-import { useContext } from 'react';
-import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import SuperBigText from './SuperBigText';
 
 const cashNotes = [100, 500, 1000, 5000, 10000];
 
 export default function CashPayment() {
-	const { machineState, setMachineState } = useContext(
-		VendingMachineStateContext
-	);
+	const { state, dispatch } = useVendingMachineContext();
 
 	const onPressCashValue = (amount: number) => {
-		setMachineState({
-			...machineState,
-			funds: machineState.funds + amount,
-			state: 'selection',
-		});
+		dispatch({ type: 'ADD_FUNDS', price: amount });
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 	};
 
 	const onPressReturnCash = () => {
-		setMachineState({ ...machineState, funds: 0, state: 'idle' });
+		dispatch({ type: 'RETURN_FUNDS' });
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'idle' });
 	};
 
 	return (
@@ -38,7 +33,7 @@ export default function CashPayment() {
 				<SuperBigText
 					size='lg'
 					position='right'
-				>{`${machineState.funds.toLocaleString()}원`}</SuperBigText>
+				>{`${state.funds.toLocaleString()}원`}</SuperBigText>
 				<div className='flex w-full justify-center gap-2'>
 					<Button color='danger' fullWidth onPress={onPressReturnCash}>
 						Return Cash

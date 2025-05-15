@@ -1,12 +1,11 @@
-import { useContext } from 'react';
 import { Card, CardBody, CardHeader, Divider } from '@heroui/react';
-import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 
 import CountdownTimer from '../components/CountdownTimer';
 import SuperBigText from '../components/SuperBigText';
 
 export default function StatusSection() {
-	const { machineState } = useContext(VendingMachineStateContext);
+	const { state } = useVendingMachineContext();
 
 	return (
 		<Card className='min-h-fit'>
@@ -14,7 +13,7 @@ export default function StatusSection() {
 			<Divider />
 			<CardBody className='flex flex-row justify-between gap-2'>
 				<SuperBigText size='md' position='center'>
-					{machineState.state.toUpperCase()}
+					{state.machineState.toUpperCase()}
 				</SuperBigText>
 				<CountdownTimer />
 			</CardBody>

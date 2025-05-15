@@ -1,35 +1,44 @@
-import React, { createContext, useState } from 'react';
-
-export type StateType = 'idle' | 'selection' | 'dispense';
-
-export interface MachineState {
-	state: StateType;
-	funds: number;
-}
-
-type ContextType = {
-	machineState: MachineState;
-	setMachineState: React.Dispatch<React.SetStateAction<MachineState>>;
-};
-
-// @ts-ignore: 선언 값으로 null로 넘겨주지 안으면 추후 코드가 불필요하게 길어지고 복잡해져 가독성이 떨어진다고 판단하여 무시.
-export const VendingMachineStateContext = createContext<ContextType>(null);
+import React, { createContext, useContext, useReducer, useState } from 'react';
+import vendingMachineReducer, {
+	type VendingMachineAction,
+	type VendingMachineState,
+} from '../reducers/VendingMachineReducers';
 
 type ContextProviderProps = {
 	children: React.ReactNode;
 };
 
+const initialState: VendingMachineState = {
+	funds: 0,
+	machineState: 'idle',
+	paymentType: 'cash',
+	cardInfo: null,
+};
+type VendingMachineContextType = {
+	state: VendingMachineState;
+	dispatch: React.ActionDispatch<[action: VendingMachineAction]>;
+};
+export const VendingMachineStateContext =
+	createContext<VendingMachineContextType | null>(null);
+
+export function useVendingMachineContext() {
+	const value = useContext(VendingMachineStateContext);
+	if (!value) {
+		throw new Error(
+			'useVendingMachineContext가 VendingMachineContextProvider 내부에 없습니다!'
+		);
+	}
+	return value;
+}
+
 export default function VendingMachineContextProvider({
 	children,
 }: ContextProviderProps) {
-	const [machineState, setMachineState] = useState<MachineState>({
-		state: 'idle',
-		funds: 0,
-	});
+	const [state, dispatch] = useReducer(vendingMachineReducer, initialState);
 
 	const value = {
-		machineState,
-		setMachineState,
+		state,
+		dispatch,
 	};
 
 	return (

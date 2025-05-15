@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
 import { Button, Card, CardBody } from '@heroui/react';
 import formatToWon from '../utils/formatToWon';
-import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 
 const sample = {
 	name: 'LEE JOONG HOON',
@@ -9,49 +8,36 @@ const sample = {
 };
 
 export default function CardPayment() {
-	const { machineState, setMachineState } = useContext(
-		VendingMachineStateContext
-	);
-	const [cardInfo, setCardInfo] = useState<typeof sample | null>(null);
-
-	useEffect(() => {
-		if (cardInfo) {
-			setCardInfo({ ...cardInfo, balance: machineState.funds });
-		}
-	}, [machineState.funds]);
-
-	useEffect(() => {
-		if (machineState.state === 'idle') {
-			onPressEjectCard();
-		}
-	}, [machineState.state]);
+	const { state, dispatch } = useVendingMachineContext();
 
 	const onPressInsertCard = () => {
-		setCardInfo(sample);
-		setMachineState({ state: 'selection', funds: sample.balance });
+		dispatch({ type: 'INSERT_CARD', cardInfo: sample });
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 	};
 
 	const onPressEjectCard = () => {
-		setCardInfo(null);
-		setMachineState({ state: 'idle', funds: 0 });
+		dispatch({ type: 'EJECT_CARD' });
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'idle' });
 	};
 
 	return (
 		<Card>
 			<CardBody className='gap-2'>
-				{cardInfo && (
+				{state.cardInfo && (
 					<div className=' bg-gray-100 rounded-lg p-4'>
-						<p className='text-xl text-right font-bold'>{cardInfo.name}</p>
+						<p className='text-xl text-right font-bold'>
+							{state.cardInfo.name}
+						</p>
 						<p className='text-2xl text-right font-bold'>
-							{formatToWon(cardInfo.balance)}
+							{formatToWon(state.cardInfo.balance)}
 						</p>
 					</div>
 				)}
 				<Button
-					color={cardInfo ? 'danger' : 'primary'}
-					onPress={cardInfo ? onPressEjectCard : onPressInsertCard}
+					color={state.cardInfo ? 'danger' : 'primary'}
+					onPress={state.cardInfo ? onPressEjectCard : onPressInsertCard}
 				>
-					{cardInfo ? 'Eject Card' : 'Insert Card'}
+					{state.cardInfo ? 'Eject Card' : 'Insert Card'}
 				</Button>
 			</CardBody>
 		</Card>

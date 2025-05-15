@@ -1,57 +1,60 @@
 import { millisecondsToSeconds } from 'framer-motion';
-
-import { useContext, useEffect, useRef, useState } from 'react';
-import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import { useEffect, useRef, useState } from 'react';
+import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import SuperBigText from './SuperBigText';
+import { SECONDS } from '../commons/constants';
 
 const DEFAULT_COUNTDOWN_TIME = 10000;
-const SECONDS = 1000;
 
 export default function CountdownTimer() {
-	const [countdown, setCountdown] = useState(0);
-	const { machineState, setMachineState } = useContext(
-		VendingMachineStateContext
-	);
+	const [countdown, setCountdown] = useState(DEFAULT_COUNTDOWN_TIME);
+	const { state, dispatch } = useVendingMachineContext();
 	const intervalRef = useRef<number | null>(null);
 
 	useEffect(() => {
-		if (machineState.funds > 0) {
+		if (state.funds > 0) {
 			reStartCountdown();
 		}
-	}, [machineState.funds]);
+	}, [state.funds]);
 
 	useEffect(() => {
-		if (machineState.state === 'selection') {
+		if (state.machineState === 'selection') {
 			startCountdown();
-		} else if (machineState.state === 'dispense') {
+		} else if (state.machineState === 'dispense') {
 			resetCountdown();
-		} else if (machineState.state === 'idle') {
+		} else if (state.machineState === 'idle') {
 			stopCountdown();
 		}
-	}, [machineState.state]);
+	}, [state.machineState]);
+
+	useEffect(() => {
+		if (countdown <= 0) {
+			stopCountdown();
+		}
+	}, [countdown]);
 
 	const startCountdown = () => {
 		clearCountdown();
 		intervalRef.current = setInterval(() => {
-			setCountdown((prevState) => {
-				if (prevState <= 0) {
-					stopCountdown();
-					return 0;
-				}
-				return prevState - SECONDS;
-			});
+			setCountdown((prevState) => prevState - SECONDS);
 		}, SECONDS);
 	};
 
 	const stopCountdown = () => {
 		clearCountdown();
-		setCountdown(0);
-		setMachineState({ funds: 0, state: 'idle' });
+		setCountdown(DEFAULT_COUNTDOWN_TIME);
+
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'idle' });
+		if (state.paymentType === 'card') {
+			dispatch({ type: 'EJECT_CARD' });
+		} else {
+			dispatch({ type: 'RETURN_FUNDS' });
+		}
 	};
 
 	const resetCountdown = () => {
 		clearCountdown();
-		setCountdown(0);
+		setCountdown(DEFAULT_COUNTDOWN_TIME);
 	};
 
 	const reStartCountdown = () => {
