@@ -61,7 +61,8 @@ export default function CashPayment() {
 						<Button
 							key={note}
 							className='font-bold'
-							variant='bordered'
+							variant={state.isSoldOut ? 'flat' : 'bordered'}
+							isDisabled={state.isSoldOut}
 							onPress={() => onPressCashValue(note)}
 						>{`${note.toLocaleString()}원`}</Button>
 					))}

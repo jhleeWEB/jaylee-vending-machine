@@ -15,6 +15,7 @@ export interface VendingMachineState {
 		balance: number;
 	} | null;
 	inventory: Item[];
+	isSoldOut: boolean;
 }
 
 export type VendingMachineAction =
@@ -52,6 +53,10 @@ export type VendingMachineAction =
 			type: 'RETURN_FUNDS';
 	  };
 
+const checkInventory = (inventory: Item[]) => {
+	return inventory.every((item) => item.count === 0);
+};
+
 export default function vendingMachineReducer(
 	state: VendingMachineState,
 	action: VendingMachineAction
@@ -82,9 +87,11 @@ export default function vendingMachineReducer(
 		case 'DECREMENT_INVENTORY_ITEM':
 			const inventory = state.inventory.map((item) => ({ ...item }));
 			inventory[action.id].count -= 1;
+			const isSoldOut = checkInventory(inventory);
 			return {
 				...state,
 				inventory,
+				isSoldOut,
 			};
 		case 'EJECT_CARD':
 			return { ...state, cardInfo: null };

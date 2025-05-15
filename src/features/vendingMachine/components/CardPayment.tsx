@@ -37,12 +37,19 @@ export default function CardPayment() {
 						</p>
 					</div>
 				)}
-				<Button
-					color={state.cardInfo ? 'danger' : 'primary'}
-					onPress={state.cardInfo ? onPressEjectCard : onPressInsertCard}
-				>
-					{state.cardInfo ? 'Eject Card' : 'Insert Card'}
-				</Button>
+				{state.cardInfo ? (
+					<Button color='danger' onPress={onPressEjectCard}>
+						Eject Card
+					</Button>
+				) : (
+					<Button
+						color={state.isSoldOut ? 'default' : 'primary'}
+						onPress={onPressInsertCard}
+						disabled={state.isSoldOut}
+					>
+						{state.isSoldOut ? 'SOLD OUT' : 'Insert Card'}
+					</Button>
+				)}
 			</CardBody>
 		</Card>
 	);

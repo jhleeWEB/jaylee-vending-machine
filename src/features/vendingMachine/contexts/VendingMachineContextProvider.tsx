@@ -13,6 +13,7 @@ const initialState: VendingMachineState = {
 	machineState: 'idle',
 	paymentType: 'cash',
 	cardInfo: null,
+	isSoldOut: false,
 	inventory: [
 		{
 			id: 0,
