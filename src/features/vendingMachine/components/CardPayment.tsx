@@ -12,9 +12,7 @@ export default function CardPayment() {
 	const { machineState, setMachineState } = useContext(
 		VendingMachineStateContext
 	);
-	const [cardInfo, setCardInfo] = useState<typeof sample | undefined>(
-		undefined
-	);
+	const [cardInfo, setCardInfo] = useState<typeof sample | null>(null);
 
 	useEffect(() => {
 		if (cardInfo) {
@@ -34,7 +32,7 @@ export default function CardPayment() {
 	};
 
 	const onPressEjectCard = () => {
-		setCardInfo(undefined);
+		setCardInfo(null);
 		setMachineState({ state: 'idle', funds: 0 });
 	};
 
