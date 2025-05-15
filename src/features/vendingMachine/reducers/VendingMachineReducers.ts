@@ -73,10 +73,11 @@ export default function vendingMachineReducer(
 				paymentType: action.paymentType,
 			};
 		case 'PURCHASE':
+			const inventory = state.inventory.map((item) => ({ ...item }));
+			inventory[action.id].count -= 1;
+
 			if (state.paymentType === 'cash') {
 				const funds = state.funds - action.price;
-				const inventory = state.inventory.map((item) => ({ ...item }));
-				inventory[action.id].count -= 1;
 				return {
 					...state,
 					funds,
@@ -89,6 +90,7 @@ export default function vendingMachineReducer(
 					return {
 						...state,
 						cardInfo: newCardInfo,
+						inventory,
 					};
 				} else {
 					return state;
