@@ -1,6 +1,6 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Card, CardBody, CardHeader } from '@heroui/react';
-import { VendingMachineStateContext } from '../contexts/VendingMachineContextProvider';
+import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import formatToWon from '../utils/formatToWon';
 import { SECONDS } from '../commons/constants';
 interface Props {
@@ -11,12 +11,10 @@ interface Props {
 const TWO_SECONDS = SECONDS * 2;
 
 export default function MenuItem({ title, price }: Props) {
-	const { machineState, setMachineState } = useContext(
-		VendingMachineStateContext
-	);
+	const { state, dispatch } = useVendingMachineContext();
 	const delayTimeout = useRef<number | null>(null);
 
-	const isDisabled = machineState.funds < price;
+	const isDisabled = state.funds < price;
 
 	useEffect(() => {
 		return () => {
@@ -28,10 +26,7 @@ export default function MenuItem({ title, price }: Props) {
 	const startDelayTimeout = () => {
 		clearDelayTimeout();
 		delayTimeout.current = setTimeout(() => {
-			setMachineState({
-				state: 'selection',
-				funds: machineState.funds - price,
-			});
+			dispatch({ type: 'PURCHASE', price });
 		}, TWO_SECONDS);
 	};
 
@@ -43,8 +38,8 @@ export default function MenuItem({ title, price }: Props) {
 	};
 
 	const onClickItem = () => {
-		if (machineState.funds >= price) {
-			setMachineState((prevState) => ({ ...prevState, state: 'dispense' }));
+		if (state.funds >= price) {
+			dispatch({ type: 'TRANSITION_STATE', nextState: 'dispense' });
 			startDelayTimeout();
 		}
 	};
