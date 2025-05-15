@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { Button, Card, CardBody } from '@heroui/react';
 import formatToWon from '../utils/formatToWon';
 import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';

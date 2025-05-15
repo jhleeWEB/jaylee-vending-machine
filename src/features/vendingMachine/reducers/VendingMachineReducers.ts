@@ -1,8 +1,8 @@
 export type StateType = 'idle' | 'selection' | 'dispense';
-
+export type PaymentType = 'cash' | 'card';
 export interface VendingMachineState {
 	machineState: StateType;
-	paymentType: 'cash' | 'card';
+	paymentType: PaymentType;
 	funds: number;
 	cardInfo: {
 		name: string;
@@ -18,6 +18,10 @@ export type VendingMachineAction =
 	| {
 			type: 'ADD_FUNDS';
 			price: number;
+	  }
+	| {
+			type: 'CHANGE_PAYMENT_TYPE';
+			paymentType: PaymentType;
 	  }
 	| {
 			type: 'TRANSITION_STATE';
@@ -45,7 +49,7 @@ export default function vendingMachineReducer(
 		case 'TRANSITION_STATE':
 			return { ...state, machineState: action.nextState };
 		case 'ADD_FUNDS':
-			const funds = state.funds - action.price;
+			const funds = state.funds + action.price;
 			return {
 				...state,
 				funds,
@@ -53,7 +57,12 @@ export default function vendingMachineReducer(
 		case 'INSERT_CARD':
 			return {
 				...state,
-				cardInfo: action.cardInfo,
+				cardInfo: { ...action.cardInfo },
+			};
+		case 'CHANGE_PAYMENT_TYPE':
+			return {
+				...state,
+				paymentType: action.paymentType,
 			};
 		case 'PURCHASE':
 			if (state.paymentType === 'cash') {

@@ -14,7 +14,12 @@ export default function MenuItem({ title, price }: Props) {
 	const { state, dispatch } = useVendingMachineContext();
 	const delayTimeout = useRef<number | null>(null);
 
-	const isDisabled = state.funds < price;
+	let money = state.funds;
+	if (state.paymentType === 'card' && state.cardInfo) {
+		money = state.cardInfo.balance;
+	}
+
+	const isDisabled = money < price;
 
 	useEffect(() => {
 		return () => {
@@ -27,6 +32,7 @@ export default function MenuItem({ title, price }: Props) {
 		clearDelayTimeout();
 		delayTimeout.current = setTimeout(() => {
 			dispatch({ type: 'PURCHASE', price });
+			dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 		}, TWO_SECONDS);
 	};
 
@@ -38,10 +44,8 @@ export default function MenuItem({ title, price }: Props) {
 	};
 
 	const onClickItem = () => {
-		if (state.funds >= price) {
-			dispatch({ type: 'TRANSITION_STATE', nextState: 'dispense' });
-			startDelayTimeout();
-		}
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'dispense' });
+		startDelayTimeout();
 	};
 
 	return (
