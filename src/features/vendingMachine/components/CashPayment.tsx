@@ -13,7 +13,7 @@ export default function CashPayment() {
 			dispatch({ type: 'ADD_FUNDS', amount });
 			dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 		} else {
-			alert(
+			console.error(
 				`${formatToWon(amount)} ${
 					isCoin(amount) ? '동전은' : '지폐는'
 				} 사용할 수 없습니다.`
