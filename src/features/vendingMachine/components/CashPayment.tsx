@@ -1,4 +1,4 @@
-import { Button, Card, CardBody } from '@heroui/react';
+import { addToast, Button, Card, CardBody } from '@heroui/react';
 import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import SuperBigText from './SuperBigText';
 import formatToWon from '../utils/formatToWon';
@@ -13,11 +13,13 @@ export default function CashPayment() {
 			dispatch({ type: 'ADD_FUNDS', amount });
 			dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
 		} else {
-			console.error(
-				`${formatToWon(amount)} ${
+			addToast({
+				title: '사용할 수 없는 금액입니다.',
+				description: `${formatToWon(amount)} ${
 					isCoin(amount) ? '동전은' : '지폐는'
-				} 사용할 수 없습니다.`
-			);
+				} 사용할 수 없습니다.`,
+				color: 'danger',
+			});
 		}
 	};
 
