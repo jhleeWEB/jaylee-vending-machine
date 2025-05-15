@@ -2,15 +2,13 @@ import { useEffect, useRef } from 'react';
 import { Card, CardBody, CardHeader } from '@heroui/react';
 import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import formatToWon from '../utils/formatToWon';
-import { SECONDS } from '../commons/constants';
+import { postCardPayment_FAKE } from '../apis';
 interface Props {
 	title: string;
 	price: number;
 	id: number;
 	count: number;
 }
-
-const TWO_SECONDS = SECONDS * 2;
 
 export default function MenuItem({ title, price, id, count }: Props) {
 	const { state, dispatch } = useVendingMachineContext();
@@ -29,13 +27,20 @@ export default function MenuItem({ title, price, id, count }: Props) {
 		};
 	}, []);
 
-	//음료를 배분하고 결제하는 과정에 소요되는 시간은 이 함수로 대체했습니다.
-	const startDelayTimeout = () => {
+	const purchaseProduct = async () => {
 		clearDelayTimeout();
-		delayTimeout.current = setTimeout(() => {
-			dispatch({ type: 'PURCHASE', price, id });
+		if (state.paymentType === 'cash') {
+			dispatch({ type: 'DEDUCT_FUNDS', amount: price });
+			dispatch({ type: 'DECREMENT_INVENTORY_ITEM', id: id });
 			dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
-		}, TWO_SECONDS);
+		} else {
+			if (state.cardInfo) {
+				const data = await postCardPayment_FAKE(price, state.cardInfo);
+				dispatch({ type: 'UPDATE_CARD', cardInfo: data });
+				dispatch({ type: 'DECREMENT_INVENTORY_ITEM', id: id });
+				dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
+			}
+		}
 	};
 
 	const clearDelayTimeout = () => {
@@ -46,8 +51,8 @@ export default function MenuItem({ title, price, id, count }: Props) {
 	};
 
 	const onClickItem = () => {
-		dispatch({ type: 'TRANSITION_STATE', nextState: 'dispense' });
-		startDelayTimeout();
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'ignore' });
+		purchaseProduct();
 	};
 
 	return (

@@ -5,14 +5,13 @@ import Cover from '../components/Cover';
 
 export default function MenuSection() {
 	const { state } = useVendingMachineContext();
-
 	return (
 		<Card
 			className={`min-h-fit ${
-				state.machineState === 'dispense' ? 'pointer-events-none' : ''
+				state.machineState === 'ignore' ? 'pointer-events-none' : ''
 			}`}
 		>
-			{state.machineState === 'dispense' && <Cover />}
+			{state.machineState === 'ignore' && <Cover />}
 			<CardHeader className='text-3xl font-bold'>Menu</CardHeader>
 			<Divider />
 			<CardBody className='grid grid-cols-3 gap-2'>

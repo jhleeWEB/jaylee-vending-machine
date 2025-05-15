@@ -13,10 +13,10 @@ export default function PaymentMethodSection() {
 	return (
 		<Card
 			className={`min-h-fit ${
-				state.machineState === 'dispense' ? 'pointer-events-none' : ''
+				state.machineState === 'ignore' ? 'pointer-events-none' : ''
 			}`}
 		>
-			{state.machineState === 'dispense' && <Cover />}
+			{state.machineState === 'ignore' && <Cover />}
 			<CardHeader className='text-3xl font-bold'>Payment Method</CardHeader>
 			<Divider />
 			<CardBody>

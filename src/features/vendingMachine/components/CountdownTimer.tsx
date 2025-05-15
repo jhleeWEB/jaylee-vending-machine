@@ -20,7 +20,7 @@ export default function CountdownTimer() {
 	useEffect(() => {
 		if (state.machineState === 'selection') {
 			startCountdown();
-		} else if (state.machineState === 'dispense') {
+		} else if (state.machineState === 'ignore') {
 			resetCountdown();
 		} else if (state.machineState === 'idle') {
 			stopCountdown();

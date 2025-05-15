@@ -1,4 +1,4 @@
-export type StateType = 'idle' | 'selection' | 'dispense';
+export type StateType = 'idle' | 'selection' | 'ignore';
 export type PaymentType = 'cash' | 'card';
 export type Item = {
 	id: number;
@@ -19,12 +19,15 @@ export interface VendingMachineState {
 
 export type VendingMachineAction =
 	| {
-			type: 'PURCHASE';
-			price: number;
+			type: 'DECREMENT_INVENTORY_ITEM';
 			id: number;
 	  }
 	| {
 			type: 'ADD_FUNDS';
+			amount: number;
+	  }
+	| {
+			type: 'DEDUCT_FUNDS';
 			amount: number;
 	  }
 	| {
@@ -36,7 +39,7 @@ export type VendingMachineAction =
 			nextState: StateType;
 	  }
 	| {
-			type: 'INSERT_CARD';
+			type: 'UPDATE_CARD';
 			cardInfo: {
 				name: string;
 				balance: number;
@@ -57,12 +60,16 @@ export default function vendingMachineReducer(
 		case 'TRANSITION_STATE':
 			return { ...state, machineState: action.nextState };
 		case 'ADD_FUNDS':
-			const funds = state.funds + action.amount;
 			return {
 				...state,
-				funds,
+				funds: state.funds + action.amount,
 			};
-		case 'INSERT_CARD':
+		case 'ADD_FUNDS':
+			return {
+				...state,
+				funds: state.funds - action.amount,
+			};
+		case 'UPDATE_CARD':
 			return {
 				...state,
 				cardInfo: { ...action.cardInfo },
@@ -72,30 +79,13 @@ export default function vendingMachineReducer(
 				...state,
 				paymentType: action.paymentType,
 			};
-		case 'PURCHASE':
+		case 'DECREMENT_INVENTORY_ITEM':
 			const inventory = state.inventory.map((item) => ({ ...item }));
 			inventory[action.id].count -= 1;
-
-			if (state.paymentType === 'cash') {
-				const funds = state.funds - action.price;
-				return {
-					...state,
-					funds,
-					inventory,
-				};
-			} else {
-				if (state.cardInfo) {
-					const newCardInfo = { ...state.cardInfo };
-					newCardInfo.balance -= action.price;
-					return {
-						...state,
-						cardInfo: newCardInfo,
-						inventory,
-					};
-				} else {
-					return state;
-				}
-			}
+			return {
+				...state,
+				inventory,
+			};
 		case 'EJECT_CARD':
 			return { ...state, cardInfo: null };
 		case 'RETURN_FUNDS':

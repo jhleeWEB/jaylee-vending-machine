@@ -1,18 +1,22 @@
 import { Button, Card, CardBody } from '@heroui/react';
 import formatToWon from '../utils/formatToWon';
 import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
-
-const sample = {
-	name: 'LEE JOONG HOON',
-	balance: 200000,
-};
+import { fetchCardInfo_FAKE } from '../apis';
 
 export default function CardPayment() {
 	const { state, dispatch } = useVendingMachineContext();
 
-	const onPressInsertCard = () => {
-		dispatch({ type: 'INSERT_CARD', cardInfo: sample });
-		dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
+	const onPressInsertCard = async () => {
+		dispatch({ type: 'TRANSITION_STATE', nextState: 'ignore' });
+		try {
+			const data = await fetchCardInfo_FAKE();
+			if (data) {
+				dispatch({ type: 'UPDATE_CARD', cardInfo: data });
+				dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });
+			}
+		} catch (e) {
+			throw new Error('카드 정보 불러오기 요청 실패 했습니다.');
+		}
 	};
 
 	const onPressEjectCard = () => {
