@@ -69,7 +69,7 @@ _사용자 흐름 다이어그램_, _상세 흐름 다이어그램_
 
 ### 상태 관리
 
-![Alt text](image-7.png)
+![image](https://github.com/user-attachments/assets/3a180762-65b4-4f0b-93c4-762900f5d25b)
 
 관리해야 할 상태가 많고, 복잡하여 `useReducer()`를 사용하는 것이 가장 적합하다고 판단했습니다. 전역으로 제공되어야 하기 때문에 Context + Reducer를 조합하여 사용하기로 결정했습니다.
 
@@ -109,7 +109,7 @@ export default function CardPayment() {
 
 ### 상태 전이 다이어그램
 
-![Alt text](image-12.png)
+![image](https://github.com/user-attachments/assets/ce00f705-acb6-4a04-9056-5ea3c19922d1)
 
 세 가지 상태에 따라 특정 요소가 활성화되며, 이에 따라 UI가 렌더링됩니다.
 
