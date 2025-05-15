@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Card, CardBody, CardHeader } from '@heroui/react';
 import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import formatToWon from '../utils/formatToWon';
-import { postCardPayment_FAKE } from '../apis';
+import { dispenseProduct_FAKE, postCardPayment_FAKE } from '../apis';
 interface Props {
 	title: string;
 	price: number;
@@ -30,6 +30,7 @@ export default function MenuItem({ title, price, id, count }: Props) {
 	const purchaseProduct = async () => {
 		clearDelayTimeout();
 		if (state.paymentType === 'cash') {
+			await dispenseProduct_FAKE();
 			dispatch({ type: 'DEDUCT_FUNDS', amount: price });
 			dispatch({ type: 'DECREMENT_INVENTORY_ITEM', id: id });
 			dispatch({ type: 'TRANSITION_STATE', nextState: 'selection' });

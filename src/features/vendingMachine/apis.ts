@@ -31,3 +31,12 @@ export function postCardPayment_FAKE(price: number, cardInfo: CardInfo) {
 	});
 	return result;
 }
+export function dispenseProduct_FAKE() {
+	const result = new Promise((resolve) => {
+		const id = setTimeout(() => {
+			resolve('dispensed');
+			clearTimeout(id);
+		}, SECONDS * 1);
+	});
+	return result;
+}

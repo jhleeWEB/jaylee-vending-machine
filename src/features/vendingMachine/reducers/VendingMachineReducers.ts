@@ -64,7 +64,7 @@ export default function vendingMachineReducer(
 				...state,
 				funds: state.funds + action.amount,
 			};
-		case 'ADD_FUNDS':
+		case 'DEDUCT_FUNDS':
 			return {
 				...state,
 				funds: state.funds - action.amount,
@@ -90,5 +90,7 @@ export default function vendingMachineReducer(
 			return { ...state, cardInfo: null };
 		case 'RETURN_FUNDS':
 			return { ...state, funds: 0 };
+		default:
+			return { ...state };
 	}
 }
