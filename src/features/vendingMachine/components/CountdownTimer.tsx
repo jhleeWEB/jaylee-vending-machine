@@ -1,5 +1,4 @@
 import { millisecondsToSeconds } from 'framer-motion';
-
 import { useEffect, useRef, useState } from 'react';
 import { useVendingMachineContext } from '../contexts/VendingMachineContextProvider';
 import SuperBigText from './SuperBigText';
@@ -13,6 +12,12 @@ export default function CountdownTimer() {
 	const intervalRef = useRef<number | null>(null);
 
 	useEffect(() => {
+		if (state.funds > 0) {
+			reStartCountdown();
+		}
+	}, [state.funds]);
+
+	useEffect(() => {
 		if (state.machineState === 'selection') {
 			startCountdown();
 		} else if (state.machineState === 'dispense') {
@@ -22,22 +27,23 @@ export default function CountdownTimer() {
 		}
 	}, [state.machineState]);
 
+	useEffect(() => {
+		if (countdown <= 0) {
+			stopCountdown();
+		}
+	}, [countdown]);
+
 	const startCountdown = () => {
 		clearCountdown();
 		intervalRef.current = setInterval(() => {
-			setCountdown((prevState) => {
-				if (prevState <= 0) {
-					stopCountdown();
-					return 0;
-				}
-				return prevState - SECONDS;
-			});
+			setCountdown((prevState) => prevState - SECONDS);
 		}, SECONDS);
 	};
 
 	const stopCountdown = () => {
 		clearCountdown();
 		setCountdown(DEFAULT_COUNTDOWN_TIME);
+
 		dispatch({ type: 'TRANSITION_STATE', nextState: 'idle' });
 		if (state.paymentType === 'card') {
 			dispatch({ type: 'EJECT_CARD' });
